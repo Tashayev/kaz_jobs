@@ -1,10 +1,19 @@
-import { Router } from "express";
-import { registerUser, loginUser, logoutUser } from "../controllers/user.controller.js";
+import { Router } from "express"
+import {
+  getProfile,
+  registerUser,
+  loginUser,
+  logoutUser,
+  getRefreshToken,
+} from "../controllers/user.controller.js"
+import authMiddleware from "../middlewares/auth.middleware.js"
 
-const router = Router();
+const router = Router()
 
-router.route("/register").post(registerUser);
-router.route("/login").post(loginUser);
-router.route("/logout").post(logoutUser);
+router.route("/register").post(registerUser)
+router.route("/login").post(loginUser)
+router.route("/logout").post(logoutUser)
+router.route("/profile").get(authMiddleware, getProfile)
+router.route("/refresh").post(getRefreshToken)
 
-export default router;
+export default router
