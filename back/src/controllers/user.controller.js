@@ -96,8 +96,9 @@ const logoutUser = async (req, res) => {
 
 const getProfile = async (req, res) => {
   try {
-    const user = await User.findOne({ email: req.user.email })
-      .select("-password -refreshToken")
+    const user = await User.findOne({ email: req.user.email }).select(
+      "-password -refreshToken",
+    )
     if (!user) return res.status(404).json({ message: "User not found." })
     res.status(200).json({ user })
   } catch (err) {
@@ -122,7 +123,6 @@ const getRefreshToken = async (req, res) => {
 
     const { accessToken } = await generateToken(user)
     res.status(200).json({ accessToken })
-
   } catch (err) {
     console.error(err)
     return res.status(401).json({ message: "Invalid or expired refreshToken." })

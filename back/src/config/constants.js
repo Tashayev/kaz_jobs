@@ -1,1 +1,1 @@
-export const DB_NAME = "intro-backend";
+export const DB_NAME = "intro-backend"

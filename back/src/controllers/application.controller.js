@@ -56,12 +56,13 @@ const updateApplication = async (req, res) => {
     const application = await Application.findOne({
       _id: req.params.id,
     })
-    if (!application) return res.status(404).json({ message: "Application not found." })
+    if (!application)
+      return res.status(404).json({ message: "Application not found." })
 
     const updatedApplication = await Application.findByIdAndUpdate(
       req.params.id,
       { status },
-      { new: true }
+      { new: true },
     )
     res.status(200).json({ application: updatedApplication })
   } catch (err) {
@@ -72,9 +73,10 @@ const updateApplication = async (req, res) => {
 const getApplication = async (req, res) => {
   try {
     const application = await Application.findById(req.params.id)
-      .populate("job", "title location salary") // ✅ get job details
-      .populate("applicant", "username email")  // ✅ get applicant details
-    if (!application) return res.status(404).json({ message: "Application not found." })
+      .populate("job", "title location salary")
+      .populate("applicant", "username email")
+    if (!application)
+      return res.status(404).json({ message: "Application not found." })
     res.status(200).json({ application })
   } catch (err) {
     return res.status(500).json({ message: err.message })
@@ -83,19 +85,27 @@ const getApplication = async (req, res) => {
 
 const getJobApplications = async (req, res) => {
   try {
-    const job = await Job.findOne({ 
+    const job = await Job.findOne({
       _id: req.params.id,
-      Ò: req.user._id
+      Ò: req.user._id,
     })
     if (!job) return res.status(404).json({ message: "Job not found." })
 
-    const applications = await Application.find({ job: req.params.id })
-      .populate("applicant", "username email") // ✅ get applicant details
-    
+    const applications = await Application.find({
+      job: req.params.id,
+    }).populate("applicant", "username email")
+
     res.status(200).json({ applications })
   } catch (err) {
     return res.status(500).json({ message: err.message })
   }
 }
 
-export { createApplication, getApplications, deleteApplication, updateApplication, getApplication, getJobApplications }
+export {
+  createApplication,
+  getApplications,
+  deleteApplication,
+  updateApplication,
+  getApplication,
+  getJobApplications,
+}
