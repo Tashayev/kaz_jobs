@@ -72,17 +72,10 @@ src/
 └── app.js
 API Endpoints
 Base URL: http://localhost:4000/api/v1
-Auth
-MethodEndpointAccessDescriptionPOST/users/registerPublicRegister new userPOST/users/loginPublicLoginPOST/users/logoutPublicLogoutPOST/users/refresh-tokenPublicRefresh access token
-Users
-MethodEndpointAccessDescriptionGET/users/profile🔒 AnyGet own profileGET/users?role=seekerPublicGet all users
-Jobs
-MethodEndpointAccessDescriptionGET/jobsPublicGet all jobsGET/jobs/:idPublicGet single jobPOST/jobs🔒 EmployerCreate jobPATCH/jobs/:id🔒 EmployerUpdate jobDELETE/jobs/:id🔒 EmployerDelete job
-Applications
-MethodEndpointAccessDescriptionPOST/applications🔒 SeekerApply to jobGET/applications🔒 SeekerMy applicationsGET/applications/:id🔒 Seeker/EmployerSingle applicationPATCH/applications/:id🔒 EmployerUpdate statusDELETE/applications/:id🔒 Seeker/EmployerDelete applicationGET/applications/job/:id🔒 EmployerAll apps for a job
-Authentication
-Protected routes require a Bearer token in the Authorization header:
-Authorization: Bearer <accessToken>
+
+# Api Documentation
+To view the API documentation, open `api-docs.html` in your browser.
+
 Access tokens expire in 15 minutes. Use the refresh token endpoint to get a new one.
 License
 MIT
