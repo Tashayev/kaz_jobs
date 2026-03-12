@@ -7,15 +7,16 @@ import {
   updateJob,
 } from "../controllers/job.controller.js"
 import authMiddleware from "../middlewares/auth.middleware.js"
+import { requireRole } from "../middlewares/role.middleware.js"
 
 const router = Router()
 
-router.route("/").post(authMiddleware, createJob).get(getJobs)
+router.route("/").post(authMiddleware, requireRole("employer"), createJob).get(getJobs)
 
 router
   .route("/:id")
-  .delete(authMiddleware, deleteJob)
+  .delete(authMiddleware, requireRole("employer"), deleteJob)
   .get(getJob)
-  .patch(authMiddleware, updateJob)
+  .patch(authMiddleware, requireRole("employer"), updateJob)
 
 export default router

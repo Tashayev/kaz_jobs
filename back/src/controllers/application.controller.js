@@ -3,13 +3,20 @@ import { Job } from "../moduls/job.module.js"
 
 const createApplication = async (req, res) => {
   try {
-    const { job } = req.body
+    const { job, CV } = req.body
     const applicant = req.user._id
+    
     if (!job || !applicant) {
       return res
         .status(400)
         .json({ message: "Please provide all the required fields." })
     }
+    const existingApplication = await Application.findOne({ job, applicant })
+
+    if (existingApplication) {
+      return res.status(400).json({ message: "Already applied to this job." })
+    }
+    
     const application = await Application.create({
       job,
       applicant,
@@ -36,17 +43,30 @@ const getApplications = async (req, res) => {
 const deleteApplication = async (req, res) => {
   try {
     const { id } = req.params
-    const application = await Application.findOne({
-      _id: id,
-      applicant: req.user._id,
-    })
-    if (!application) {
-      return res.status(404).json({ message: "Application not found." })
+    
+    let application
+
+    if (req.user.role === "seeker") {
+      // seeker can only delete their own
+      application = await Application.findOne({ 
+        _id: id, 
+        applicant: req.user._id 
+      })
+    } else if (req.user.role === "employer") {
+      // employer can delete from their job
+      application = await Application.findById(id)
+        .populate("job")
+      // check job belongs to employer
+      if (application?.job.employer.toString() !== req.user._id.toString()) {
+        application = null
+      }
     }
+
+    if (!application) return res.status(404).json({ message: "Application not found." })
     await Application.findByIdAndDelete(id)
     res.status(200).json({ message: "Application deleted successfully." })
   } catch (err) {
-    return res.status(500).json({ message: "Internal server error.", err })
+    return res.status(500).json({ message: err.message })
   }
 }
 
@@ -56,6 +76,7 @@ const updateApplication = async (req, res) => {
     const application = await Application.findOne({
       _id: req.params.id,
     })
+
     if (!application)
       return res.status(404).json({ message: "Application not found." })
 

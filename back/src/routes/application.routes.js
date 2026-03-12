@@ -8,19 +8,20 @@ import {
   getJobApplications,
 } from "../controllers/application.controller.js"
 import authMiddleware from "../middlewares/auth.middleware.js"
+import { requireRole } from "../middlewares/role.middleware.js"
 
 const router = Router()
 
 router
   .route("/")
-  .post(authMiddleware, createApplication)
+  .post(authMiddleware, requireRole("seeker"), createApplication)
   .get(authMiddleware, getApplications)
 
 router
   .route("/:id")
   .get(authMiddleware, getApplication)
   .delete(authMiddleware, deleteApplication)
-  .patch(authMiddleware, updateApplication)
+  .patch(authMiddleware, requireRole("employer"), updateApplication)
 router.route("/job/:id").get(authMiddleware, getJobApplications)
 
 export default router
