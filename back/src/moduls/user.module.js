@@ -29,6 +29,11 @@ const userSchema = new Schema(
       type: String,
       default: null,
     },
+    role: {
+      type: String,
+      enum: ["seeker", "employer"],
+      default: "seeker",
+    }
   },
   {
     timestamps: true,

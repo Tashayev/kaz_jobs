@@ -3,10 +3,12 @@ import express from "express"
 const app = express();
 app.use(express.json());
 
-import postRouter from "./routes/post.route.js";
 import userRouter from "./routes/user.route.js";
+import jobRouter from "./routes/job.routes.js";
+import applicationRouter from "./routes/application.routes.js";
 
-app.use("/api/v1/posts", postRouter);
 app.use("/api/v1/users", userRouter);
+app.use("/api/v1/jobs", jobRouter);
+app.use("/api/v1/applications", applicationRouter);
 
 export default app;

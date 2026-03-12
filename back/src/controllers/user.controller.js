@@ -6,9 +6,9 @@ const registerUser = async (req, res) => {
   const session = await mongoose.startSession()
   try {
     session.startTransaction()
-    const { username, email, password } = req.body
+    const { username, email, password, role } = req.body
 
-    if (!username || !email || !password) {
+    if (!username || !email || !password || !role) {
       return res
         .status(400)
         .json({ message: "Please provide all the required fields." })
