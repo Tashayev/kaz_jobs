@@ -4,16 +4,22 @@ import {
   createApplication,
   getApplications,
   deleteApplication,
+  updateApplication,
+  getApplication,
+  getJobApplications,
 } from "../controllers/application.controller.js"
-import authService from "../middlewares/auth.middleware.js"
+import authMiddleware from "../middlewares/auth.middleware.js"
 
 const router = Router()
 
-router.route("/applications")
-  .post(authService,createApplication)
-  .get(getApplications)
+router.route("/")
+  .post(authMiddleware, createApplication)
+  .get(authMiddleware, getApplications)
 
-router.route("/applications/:id")
-  .delete(deleteApplication)
+router.route("/:id")
+  .get(authMiddleware, getApplication)
+  .delete(authMiddleware, deleteApplication)
+  .patch(authMiddleware, updateApplication)
+router.route("/job/:id").get(authMiddleware, getJobApplications)
 
 export default router;
