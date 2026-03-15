@@ -1,0 +1,31 @@
+import useUser from "@/features/users"
+import { usePathname, useRouter } from "next/navigation"
+import { useEffect } from "react"
+
+const protectedRoutes = [
+  "/profile",
+  "/dashboard",
+]
+const authRoutes = [
+  "/auth",
+]
+const RouteGuard = ({ children }: { children: React.ReactNode }) => {
+
+    const { isLoading, isAuthenticated } = useUser();
+    const route = useRouter();
+    const pathname = usePathname();
+
+    useEffect(() => {
+        if (isLoading) return;
+        const isProtected = protectedRoutes.some((route) => pathname.startsWith(route));
+        const isAuth = authRoutes.some((route) => pathname.startsWith(route));
+        if (isProtected && !isAuthenticated) route.replace("/auth");
+        if ( isAuth && isAuthenticated) route.replace("/dashboard");
+    }, [isAuthenticated, isLoading, pathname, route]);
+
+    if (isLoading) return null;
+    
+  return <>{children}</>;
+}
+
+export default RouteGuard

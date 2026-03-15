@@ -1,8 +1,8 @@
 "use client"
 import { useEffect } from "react"
-import { localStore } from "../utils/localStore"
+import { localStore } from "../../../components/utils/localStore"
 import { ACCESS_TOKEN } from "@/lib/baseApi"
-import useUser from "@/features/users/useUser"
+import useUser from "@/features/users"
 
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
