@@ -8,7 +8,6 @@ import { toast } from "sonner"
 import ControllerInput from "@/components/ui/inputs/ControllerInput"
 import useUser from ".."
 
-
 const formSchema = z
   .object({
     email: z.email("Invalid email."),
@@ -34,7 +33,6 @@ const RegisterForm = () => {
       role: "seeker",
     },
   })
-  console.log(form)
 
   function onSubmit(data: z.infer<typeof formSchema>) {
     toast("You submitted the following values:", {
@@ -51,7 +49,7 @@ const RegisterForm = () => {
         "--border-radius": "calc(var(--radius)  + 4px)",
       } as React.CSSProperties,
     })
-    const {conPassword, ...rest} = data
+    const { conPassword, ...rest } = data
     handleRegister(rest)
   }
   const role = useWatch({
@@ -110,7 +108,6 @@ const RegisterForm = () => {
           <button
             type="submit"
             className="w-full mt-4 py-2 bg-blue-600 text-white rounded-md"
-            onClick={() => {console.log(form.getValues())}}
           >
             Register
           </button>

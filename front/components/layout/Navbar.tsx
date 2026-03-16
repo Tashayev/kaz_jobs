@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation"
 import { Phone } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
+import useUser from "@/features/users"
 
 const navigations = [
   { label: "Find Job", path: "/jobs" },
@@ -12,7 +13,7 @@ const navigations = [
 
 const Navbar = () => {
   const pathname = usePathname()
-  const isAuth = false
+  const {isAuthenticated} = useUser()
   return (
     <header className="bg-white border-b fixed w-full z-50">
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
@@ -42,7 +43,7 @@ const Navbar = () => {
             <Phone size={14} />
             <span className="cursor-default">+702 811 44 30</span>
           </div>
-          {isAuth && (
+          {isAuthenticated && (
             <Avatar>
               <AvatarImage
                 src="https://github.com/shadcn.png"
