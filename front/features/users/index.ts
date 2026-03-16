@@ -1,12 +1,10 @@
 "use client"
 import { useAppDispatch, useAppSelector } from "@/components/hooks/useReduxTypes"
 import  { registerUser } from "./thunk/createUser"
-import { useCallback, useEffect } from "react"
+import { useCallback } from "react"
 import { UserLoginTypes, UserRegisterTypes } from "./types"
 import { logIn } from "./thunk/logIn"
 import { getProfile } from "./thunk/getProfile"
-import { userActions } from "./slice"
-
 
 const useUser = () => {
   const dispatch = useAppDispatch()

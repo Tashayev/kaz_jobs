@@ -8,6 +8,11 @@ app.use((req, res, next) => {
   next()
 })
 
+app.use(cors({
+  origin: process.env.CLIENT_URL,
+  credentials: true,
+}))
+
 import userRouter from "./routes/user.route.js"
 import jobRouter from "./routes/job.routes.js"
 import applicationRouter from "./routes/application.routes.js"
