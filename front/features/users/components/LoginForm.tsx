@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input"
 
 const LoginForm = () => {
   return (
-    <FieldSet className="w-full max-w-xs">
+    <FieldSet className="w-full">
       <FieldGroup>
         <Field>
           <FieldLabel htmlFor="username">Username</FieldLabel>

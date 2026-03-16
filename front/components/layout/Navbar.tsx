@@ -42,7 +42,7 @@ const Navbar = () => {
             <Phone size={14} />
             <span className="cursor-default">+702 811 44 30</span>
           </div>
-          {isAuth ? (
+          {isAuth && (
             <Avatar>
               <AvatarImage
                 src="https://github.com/shadcn.png"
@@ -51,15 +51,6 @@ const Navbar = () => {
               />
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
-          ) : (
-            <>
-              <Link
-                href="/auth"
-                className="bg-blue-500 text-white rounded-md px-3 py-1.5 text-sm font-medium hover:bg-blue-700 transition-colors"
-              >
-                Log In
-              </Link>
-            </>
           )}
         </div>
       </div>

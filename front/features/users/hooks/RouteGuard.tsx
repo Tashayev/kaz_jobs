@@ -5,6 +5,8 @@ import { useEffect } from "react"
 const protectedRoutes = [
   "/profile",
   "/dashboard",
+  "/",
+  "/categories",
 ]
 const authRoutes = [
   "/auth",
