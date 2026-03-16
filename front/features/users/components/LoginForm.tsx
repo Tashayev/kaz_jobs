@@ -6,8 +6,8 @@ const LoginForm = () => {
     <FieldSet className="w-full">
       <FieldGroup>
         <Field>
-          <FieldLabel htmlFor="username">Username</FieldLabel>
-          <Input id="username" type="text" placeholder="Max Leiter" />
+          <FieldLabel htmlFor="email">Email</FieldLabel>
+          <Input id="email" type="email" placeholder="example@email.com" />
           {/* <FieldDescription>
             Choose a unique username for your account.
           </FieldDescription> */}
@@ -15,7 +15,7 @@ const LoginForm = () => {
         <Field>
           <FieldLabel htmlFor="password">Password</FieldLabel>
           {/* <FieldDescription>
-            Must be at least 8 characters long.
+            Must be at least 6 characters long.
           </FieldDescription> */}
           <Input id="password" type="password" placeholder="••••••••" />
         </Field>

@@ -7,7 +7,7 @@ const REFRESH_TOKEN = "refresh_token"
 const { get, remove, set } = localStore
 
 const baseApi = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_baseApi_URL,
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
 })
 
 baseApi.interceptors.request.use(async (config) => {
