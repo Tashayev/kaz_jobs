@@ -1,6 +1,7 @@
 import mongoose from "mongoose"
 import { User } from "../moduls/user.module.js"
 import { generateToken } from "../services/token.service.js"
+import jwt from "jsonwebtoken"
 
 const registerUser = async (req, res) => {
   const session = await mongoose.startSession()
@@ -31,11 +32,11 @@ const registerUser = async (req, res) => {
       { session },
     )
 
-    const { accessToken, refreshToken } = await generateTokens(user._id)
+    const { accessToken, refreshToken } = await generateToken(user[0])
     await session.commitTransaction()
     res.status(201).json({
       message: "User created successfully.",
-      user: { id: user._id, username: user.username, email: user.email, role: user.role },
+      user: { id: user[0]._id, username: user[0].username, email: user[0].email, role: user[0].role },
       accessToken,
       refreshToken,
     })
@@ -71,7 +72,7 @@ const loginUser = async (req, res) => {
       return res.status(400).json({ message: "Incorrect password." })
     }
 
-    const { accessToken, refreshToken } = await generateTokens(user._id)
+    const { accessToken, refreshToken } = await generateToken(user) 
     res.status(200).json({
       message: "User logged in successfully.",
       user: { id: user._id, username: user.username, email: user.email, role: user.role },
@@ -117,7 +118,7 @@ const getRefreshToken = async (req, res) => {
       return res.status(400).json({ message: "refreshToken is required." })
     }
 
-    jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET)
+    jwt.verify(refreshToken, process.env.REFRESH_TOKEN)
 
     const user = await User.findOne({ refreshToken })
     if (!user) {
