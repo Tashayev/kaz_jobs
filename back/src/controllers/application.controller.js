@@ -1,91 +1,30 @@
-import { Application } from "../moduls/application.module.js"
-import { Job } from "../moduls/job.module.js"
+import {
+  createNewApplication,
+  getMyApplications,
+  getApplicationById,
+  updateApplicationStatus,
+  deleteApplicationById,
+  getApplicationsByJobId,
+} from "../services/application.service.js"
 
 const createApplication = async (req, res) => {
   try {
     const { job, CV } = req.body
-    const applicant = req.user._id
-
-    if (!job || !applicant) {
-      return res
-        .status(400)
-        .json({ message: "Please provide all the required fields." })
-    }
-    const existingApplication = await Application.findOne({ job, applicant })
-
-    if (existingApplication) {
-      return res.status(400).json({ message: "Already applied to this job." })
-    }
-
-    const application = await Application.create({
+    const application = await createNewApplication({
       job,
-      applicant,
+      CV,
+      applicant: req.user._id,
     })
-    res
-      .status(201)
-      .json({ message: "Application created successfully.", application })
+    res.status(201).json({ application })
   } catch (err) {
-    return res.status(500).json({ message: "Internal server error: ", err })
+    return res.status(400).json({ message: err.message })
   }
 }
 
 const getApplications = async (req, res) => {
   try {
-    const applications = await Application.find({ applicant: req.user._id })
-    res
-      .status(200)
-      .json({ message: "Applications retrieved successfully.", applications })
-  } catch (err) {
-    return res.status(500).json({ message: "Internal server error.", err })
-  }
-}
-
-const deleteApplication = async (req, res) => {
-  try {
-    const { id } = req.params
-
-    let application
-
-    if (req.user.role === "seeker") {
-      // seeker can only delete their own
-      application = await Application.findOne({
-        _id: id,
-        applicant: req.user._id,
-      })
-    } else if (req.user.role === "employer") {
-      // employer can delete from their job
-      application = await Application.findById(id).populate("job")
-      // check job belongs to employer
-      if (application?.job.employer.toString() !== req.user._id.toString()) {
-        application = null
-      }
-    }
-
-    if (!application)
-      return res.status(404).json({ message: "Application not found." })
-    await Application.findByIdAndDelete(id)
-    res.status(200).json({ message: "Application deleted successfully." })
-  } catch (err) {
-    return res.status(500).json({ message: err.message })
-  }
-}
-
-const updateApplication = async (req, res) => {
-  try {
-    const { status } = req.body
-    const application = await Application.findOne({
-      _id: req.params.id,
-    })
-
-    if (!application)
-      return res.status(404).json({ message: "Application not found." })
-
-    const updatedApplication = await Application.findByIdAndUpdate(
-      req.params.id,
-      { status },
-      { new: true },
-    )
-    res.status(200).json({ application: updatedApplication })
+    const applications = await getMyApplications(req.user._id)
+    res.status(200).json({ applications })
   } catch (err) {
     return res.status(500).json({ message: err.message })
   }
@@ -93,18 +32,7 @@ const updateApplication = async (req, res) => {
 
 const getApplication = async (req, res) => {
   try {
-    const application = await Application.findById(req.params.id)
-      .populate("applicant", "username email")
-      .populate({
-        path: "job",
-        select: "title location salary employer",
-        populate: {
-          path: "employer",
-          select: "username email",
-        },
-      })
-
-    console.log("application", JSON.stringify(application, null, 2)) // ✅
+    const application = await getApplicationById(req.params.id)
     if (!application)
       return res.status(404).json({ message: "Application not found." })
 
@@ -112,7 +40,6 @@ const getApplication = async (req, res) => {
       application.applicant?._id.toString() === req.user._id.toString()
     const isEmployer =
       application.job?.employer?._id?.toString() === req.user._id.toString()
-
     if (!isApplicant && !isEmployer) {
       return res.status(403).json({ message: "Unauthorized." })
     }
@@ -123,18 +50,39 @@ const getApplication = async (req, res) => {
   }
 }
 
+const updateApplication = async (req, res) => {
+  try {
+    const application = await updateApplicationStatus(
+      req.params.id,
+      req.body.status,
+    )
+    if (!application)
+      return res.status(404).json({ message: "Application not found." })
+    res.status(200).json({ application })
+  } catch (err) {
+    return res.status(500).json({ message: err.message })
+  }
+}
+
+const deleteApplication = async (req, res) => {
+  try {
+    const result = await deleteApplicationById(req.params.id, req.user)
+    if (!result)
+      return res.status(404).json({ message: "Application not found." })
+    res.status(200).json({ message: "Application deleted successfully." })
+  } catch (err) {
+    return res.status(500).json({ message: err.message })
+  }
+}
+
 const getJobApplications = async (req, res) => {
   try {
-    const job = await Job.findOne({
-      _id: req.params.id,
-      employer: req.user._id,
-    })
-    if (!job) return res.status(404).json({ message: "Job not found." })
-
-    const applications = await Application.find({
-      job: req.params.id,
-    }).populate("applicant", "username email")
-
+    const applications = await getApplicationsByJobId(
+      req.params.id,
+      req.user._id,
+    )
+    if (!applications)
+      return res.status(404).json({ message: "Job not found." })
     res.status(200).json({ applications })
   } catch (err) {
     return res.status(500).json({ message: err.message })
@@ -144,8 +92,8 @@ const getJobApplications = async (req, res) => {
 export {
   createApplication,
   getApplications,
-  deleteApplication,
-  updateApplication,
   getApplication,
+  updateApplication,
+  deleteApplication,
   getJobApplications,
 }

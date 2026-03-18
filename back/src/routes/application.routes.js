@@ -17,11 +17,12 @@ router
   .post(authMiddleware, requireRole("seeker"), createApplication)
   .get(authMiddleware, getApplications)
 
+router.route("/job/:id").get(authMiddleware, getJobApplications)
+
 router
   .route("/:id")
   .get(authMiddleware, getApplication)
   .delete(authMiddleware, deleteApplication)
   .patch(authMiddleware, requireRole("employer"), updateApplication)
-router.route("/job/:id").get(authMiddleware, getJobApplications)
 
 export default router

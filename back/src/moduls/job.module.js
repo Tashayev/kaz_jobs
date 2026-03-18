@@ -18,7 +18,8 @@ const jobSchema = new Schema(
     },
     salary: {
       type: Number,
-      trim: true,
+      max: 1000000000000,
+      min: 0,
     },
     location: {
       type: String,
@@ -38,6 +39,11 @@ const jobSchema = new Schema(
     type: {
       type: String,
       enum: ["full-time", "part-time", "remote"],
+    },
+    category: {
+      type: String,
+      enum: ["technology", "finance", "healthcare", "engineering", "education", "retail"],
+      default: "technology",
     },
   },
   { timestamps: true },

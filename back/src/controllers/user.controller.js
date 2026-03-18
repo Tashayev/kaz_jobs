@@ -1,154 +1,84 @@
-import mongoose from "mongoose"
-import { User } from "../moduls/user.module.js"
-import { generateToken } from "../services/token.service.js"
-import jwt from "jsonwebtoken"
+import {
+  registerService,
+  loginService,
+  logoutService,
+  refreshTokenService,
+  getProfileService,
+  getUsersService,
+} from "../services/auth.service.js"
 
 const registerUser = async (req, res) => {
-  const session = await mongoose.startSession()
   try {
-    session.startTransaction()
     const { username, email, password, role } = req.body
-
     if (!username || !email || !password || !role) {
-      return res
-        .status(400)
-        .json({ message: "Please provide all the required fields." })
+      return res.status(400).json({ message: "Please provide all the required fields." })
     }
-
-    const existingUser = await User.findOne({ email })
-    if (existingUser) {
-      return res.status(400).json({ message: "Email already exists." })
-    }
-
-    const user = await User.create(
-      [
-        {
-          username,
-          email: email.toLowerCase(),
-          password,
-          role
-        },
-      ],
-      { session },
-    )
-
-    const { accessToken, refreshToken } = await generateToken(user[0])
-    await session.commitTransaction()
+    const { user, accessToken, refreshToken } = await registerService({ username, email, password, role })
     res.status(201).json({
-      message: "User created successfully.",
-      user: { id: user[0]._id, username: user[0].username, email: user[0].email, role: user[0].role },
+      user: { id: user._id, username: user.username, email: user.email, role: user.role },
       accessToken,
       refreshToken,
     })
   } catch (err) {
-    session.abortTransaction()
-    return res
-      .status(500)
-      .json({ message: `Internal server error: ${err.message}` })
-  } finally {
-    session.endSession()
+    return res.status(400).json({ message: err.message })
   }
 }
 
 const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body
-
     if (!email || !password) {
-      return res
-        .status(400)
-        .json({ message: "Please provide all the required fields." })
+      return res.status(400).json({ message: "Please provide all the required fields." })
     }
-
-    const user = await User.findOne({
-      email: email.toLowerCase(),
-    })
-
-    if (!user) {
-      return res.status(400).json({ message: "User not found." })
-    }
-
-    if (!(await user.comparePassword(password))) {
-      return res.status(400).json({ message: "Incorrect password." })
-    }
-
-    const { accessToken, refreshToken } = await generateToken(user) 
+    const { user, accessToken, refreshToken } = await loginService({ email, password })
     res.status(200).json({
-      message: "User logged in successfully.",
       user: { id: user._id, username: user.username, email: user.email, role: user.role },
       accessToken,
       refreshToken,
     })
   } catch (err) {
-    return res.status(500).json({ message: "Internal server error." })
+    return res.status(400).json({ message: err.message })
   }
 }
 
 const logoutUser = async (req, res) => {
   try {
     const { email } = req.body
-    const user = await User.findOne({ email: email.toLowerCase() })
-    if (!user) return res.status(400).json({ message: "User not found." })
-
-    await User.findByIdAndUpdate(user._id, { refreshToken: null })
-
+    await logoutService(email)
     res.status(200).json({ message: "User logged out successfully." })
   } catch (err) {
-    return res.status(500).json({ message: "Internal server error: ", err })
-  }
-}
-
-const getProfile = async (req, res) => {
-  try {
-    const user = await User.findOne({ email: req.user.email }).select(
-      "-password -refreshToken",
-    )
-    if (!user) return res.status(404).json({ message: "User not found." })
-    res.status(200).json({ user })
-  } catch (err) {
-    console.error(err)
-    return res.status(500).json({ message: "Internal server error." })
+    return res.status(400).json({ message: err.message })
   }
 }
 
 const getRefreshToken = async (req, res) => {
   try {
     const { refreshToken } = req.body
-    if (!refreshToken) {
-      return res.status(400).json({ message: "refreshToken is required." })
-    }
-
-    jwt.verify(refreshToken, process.env.REFRESH_TOKEN)
-
-    const user = await User.findOne({ refreshToken })
-    if (!user) {
-      return res.status(401).json({ message: "Invalid refreshToken." })
-    }
-
-    const { accessToken, refreshToken: newRefreshToken } = await generateToken(user)
+    if (!refreshToken) return res.status(400).json({ message: "refreshToken is required." })
+    const { accessToken, refreshToken: newRefreshToken } = await refreshTokenService(refreshToken)
     res.status(200).json({ accessToken, refreshToken: newRefreshToken })
   } catch (err) {
-    console.error(err)
     return res.status(401).json({ message: "Invalid or expired refreshToken." })
+  }
+}
+
+const getProfile = async (req, res) => {
+  try {
+    const user = await getProfileService(req.user.email)
+    if (!user) return res.status(404).json({ message: "User not found." })
+    res.status(200).json({ user })
+  } catch (err) {
+    return res.status(500).json({ message: err.message })
   }
 }
 
 const getUsers = async (req, res) => {
   try {
-    const { role } = req.query
-    const filter = role ? { role } : {}
-    const users = await User.find(filter).select("-password -refreshToken -__v ")
+    const users = await getUsersService(req.query.role)
     res.status(200).json({ users })
   } catch (err) {
     return res.status(500).json({ message: err.message })
   }
 }
 
-export {
-  registerUser,
-  loginUser,
-  logoutUser,
-  getProfile,
-  getRefreshToken,
-  getUsers
-}
+export { registerUser, loginUser, logoutUser, getRefreshToken, getProfile, getUsers }
