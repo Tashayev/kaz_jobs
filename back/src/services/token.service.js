@@ -5,7 +5,7 @@ export const generateToken = async (user) => {
   const accessToken = jwt.sign(
     { email: user.email, _id: user._id, role: user.role },
     process.env.ACCESS_TOKEN,
-    { expiresIn: "30s" },
+    { expiresIn: "1h" },
   )
   const refreshToken = jwt.sign(
     { email: user.email, _id: user._id, role: user.role },
