@@ -22,6 +22,13 @@ baseApi.interceptors.response.use(
   (response) => response,
   async (error) => {
     const original = error.config
+    //to aviod infinite loop
+    if (original.url?.includes('refresh')) {
+      remove(ACCESS_TOKEN)
+      remove(REFRESH_TOKEN)
+      window.location.href = '/auth'
+      return Promise.reject(error)
+    }
     if (error.response.status === 401 && !original._retry) {
       original._retry = true
       try {

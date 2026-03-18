@@ -125,8 +125,8 @@ const getRefreshToken = async (req, res) => {
       return res.status(401).json({ message: "Invalid refreshToken." })
     }
 
-    const { accessToken } = await generateToken(user)
-    res.status(200).json({ accessToken })
+    const { accessToken, refreshToken: newRefreshToken } = await generateToken(user)
+    res.status(200).json({ accessToken, refreshToken: newRefreshToken })
   } catch (err) {
     console.error(err)
     return res.status(401).json({ message: "Invalid or expired refreshToken." })
