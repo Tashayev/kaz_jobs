@@ -16,7 +16,6 @@ export const logIn = createAsyncThunk(
       const { accessToken, refreshToken } = response.data
       set(ACCESS_TOKEN, accessToken)
       set(REFRESH_TOKEN, refreshToken)
-      console.log(response.data)
       return response.data
     } catch (error) {
       if(error instanceof AxiosError) {
