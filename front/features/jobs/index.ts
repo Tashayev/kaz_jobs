@@ -5,6 +5,7 @@ import {
 import { useCallback, useEffect } from "react"
 import { RootState } from "@/store"
 import { fetchJobs } from "./thunk/fetchJobs"
+import { fetchJobById } from "./thunk/fetchJobById"
 
 export const useJobs = () => {
   const dispatch = useAppDispatch()
@@ -21,5 +22,9 @@ export const useJobs = () => {
     if (jobs.length === 0) handleFetchJobs()
   }, [jobs.length, handleFetchJobs])
 
-  return { homeStage, isLoading, handleFetchJobs, jobs }
+  const handleFetchJobById = async (id: string) => {
+    await dispatch(fetchJobById(id)).unwrap()
+  }
+
+  return { homeStage, isLoading, handleFetchJobs, jobs, handleFetchJobById }
 }

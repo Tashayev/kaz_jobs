@@ -5,6 +5,8 @@ import { extraReducers } from "./thunk"
 const initialState: JobState = {
     jobs: [],
     isLoading: false,
+    selectedJob: null,
+    selectedJobLoading: false,  
 }
 
 

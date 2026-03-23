@@ -1,15 +1,11 @@
 import { Button } from '@/components/ui/button'
 import JobCard from '@/features/jobs/components/JobCard'
-import { Job } from '@/features/jobs/types'
 import { ArrowRight, Briefcase } from 'lucide-react'
 import Link from 'next/link'
+import { useJobs } from '..'
 
-type Props = {
-  isLoading: boolean
-  homeStage: Job[]
-}
-
-const FeaturedJobs = ({isLoading, homeStage}: Props) => {
+const FeaturedJobs = () => {
+   const { isLoading, homeStage } = useJobs()
   return (
     <section className="bg-gray-50 py-16">
         <div className="max-w-5xl mx-auto px-6">

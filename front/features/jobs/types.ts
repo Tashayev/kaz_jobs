@@ -14,5 +14,7 @@ export type Job = {
 
 export type JobState = {
   jobs: Job[]
+  selectedJob?: Job | null
   isLoading: boolean
+  selectedJobLoading?: boolean
 }
