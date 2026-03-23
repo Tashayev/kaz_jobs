@@ -10,7 +10,9 @@ import { fetchJobById } from "./thunk/fetchJobById"
 export const useJobs = () => {
   const dispatch = useAppDispatch()
 
-  const { jobs, isLoading } = useAppSelector((state: RootState) => state.job)
+  const { jobs, isLoading, selectedJob, selectedJobLoading } = useAppSelector(
+    (state: RootState) => state.job,
+  )
 
   const homeStage = jobs.slice(0, 6)
 
@@ -22,9 +24,20 @@ export const useJobs = () => {
     if (jobs.length === 0) handleFetchJobs()
   }, [jobs.length, handleFetchJobs])
 
-  const handleFetchJobById = async (id: string) => {
-    await dispatch(fetchJobById(id)).unwrap()
-  }
+  const handleFetchJobById = useCallback(
+    async (id: string) => {
+      await dispatch(fetchJobById(id)).unwrap()
+    },
+    [dispatch],
+  )
 
-  return { homeStage, isLoading, handleFetchJobs, jobs, handleFetchJobById }
+  return {
+    homeStage,
+    isLoading,
+    handleFetchJobs,
+    jobs,
+    handleFetchJobById,
+    selectedJob,
+    selectedJobLoading,
+  }
 }

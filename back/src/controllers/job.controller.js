@@ -28,6 +28,9 @@ const deleteJob = async (req, res) => {
 
 const getJob = async (req, res) => {
   try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(404).json({ message: "Job not found." })
+    }
     const job = await getJobById(req.params.id)
     if (!job) return res.status(404).json({ message: "Job not found." })
     res.status(200).json({ job })

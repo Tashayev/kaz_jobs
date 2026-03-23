@@ -1,10 +1,242 @@
-import { useParams } from "next/navigation"
+"use client"
+
+import { useJobs } from "@/features/jobs"
+import useUser from "@/features/users"
+import { notFound, useParams, useRouter } from "next/navigation"
+import { useEffect } from "react"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
+import {
+  MapPin,
+  Clock,
+  ChevronLeft,
+  Building2,
+  CalendarDays,
+  BadgeDollarSign,
+} from "lucide-react"
+import { TYPE_COLORS } from "@/constants"
+
+import Loading from "./loading"
 
 const JobDetailPage = () => {
-  const { id } = useParams();
+  const { id } = useParams()
+  const router = useRouter()
+  const { selectedJob: job, selectedJobLoading, handleFetchJobById } = useJobs()
+  const { isAuthenticated, user } = useUser()
+
+  useEffect(() => {
+    if (id) handleFetchJobById(id as string)
+  }, [id, handleFetchJobById])
+
+  useEffect(() => {
+    if (!selectedJobLoading && !job && id) notFound()
+  }, [selectedJobLoading, job, id])
+
+  const isSeeker = isAuthenticated && user?.role === "seeker"
+  const isOwner = user?.email === job?.employer?.email
   
+
+  if (selectedJobLoading) {
+    return (
+      <Loading />
+    )
+  }
+
   return (
-    <div>Job Detail Page</div>
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-5xl mx-auto px-6 py-10">
+        {/* Back */}
+        <button
+          onClick={() => router.back()}
+          className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-800 transition-colors mb-8"
+        >
+          <ChevronLeft size={16} />
+          Back to jobs
+        </button>
+
+        {/* Header */}
+        <div className="bg-white rounded-2xl border border-gray-100 p-6 mb-6">
+          <div className="flex items-start justify-between gap-4 flex-wrap">
+            <div className="flex items-start gap-4">
+              <div className="w-14 h-14 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
+                <Building2 size={24} className="text-blue-600" />
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold text-gray-900">
+                  {job?.title}
+                </h1>
+                {job?.employer && (
+                  <p className="text-gray-500 mt-1">{job.employer.username}</p>
+                )}
+                <div className="flex flex-wrap items-center gap-3 mt-3">
+                  {job?.location && (
+                    <span className="flex items-center gap-1 text-sm text-gray-500">
+                      <MapPin size={14} />
+                      {job.location}
+                    </span>
+                  )}
+                  {job?.type && (
+                    <Badge
+                      variant="outline"
+                      className={`text-xs font-medium ${TYPE_COLORS[job.type] ?? "bg-gray-100 text-gray-600"}`}
+                    >
+                      {job.type}
+                    </Badge>
+                  )}
+                  {job?.createdAt && (
+                    <span className="flex items-center gap-1 text-sm text-gray-400">
+                      <Clock size={14} />
+                      Posted{" "}
+                      {new Date(job.createdAt).toLocaleDateString("en-GB", {
+                        day: "numeric",
+                        month: "short",
+                        year: "numeric",
+                      })}
+                    </span>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Body */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Left — main content */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Description */}
+            <div className="bg-white rounded-2xl border border-gray-100 p-6">
+              <h2 className="text-base font-semibold text-gray-900 mb-4">
+                Job Description
+              </h2>
+              <p className="text-sm text-gray-600 leading-relaxed whitespace-pre-line">
+                {job?.description}
+              </p>
+            </div>
+
+            {/* Skills */}
+            {job?.skills && job.skills.length > 0 && (
+              <div className="bg-white rounded-2xl border border-gray-100 p-6">
+                <h2 className="text-base font-semibold text-gray-900 mb-4">
+                  Required Skills
+                </h2>
+                <div className="flex flex-wrap gap-2">
+                  {job.skills.map((skill) => (
+                    <span
+                      key={skill}
+                      className="text-sm bg-blue-50 text-blue-700 px-3 py-1 rounded-full font-medium"
+                    >
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Right — sidebar */}
+          <div className="space-y-4">
+            {/* Apply card */}
+            <Card className="border border-gray-100 rounded-2xl">
+              <CardContent className="p-6 space-y-4">
+                {job?.salary && (
+                  <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-lg bg-green-50 flex items-center justify-center">
+                      <BadgeDollarSign size={16} className="text-green-600" />
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-400">Salary</p>
+                      <p className="font-semibold text-gray-900">
+                        ₸{job.salary.toLocaleString()}
+                        <span className="text-xs text-gray-400 font-normal">
+                          {" "}
+                          /mo
+                        </span>
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                {job?.deadline && (
+                  <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-lg bg-amber-50 flex items-center justify-center">
+                      <CalendarDays size={16} className="text-amber-600" />
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-400">Deadline</p>
+                      <p className="font-semibold text-gray-900">
+                        {new Date(job.deadline).toLocaleDateString("en-GB", {
+                          day: "numeric",
+                          month: "short",
+                          year: "numeric",
+                        })}
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                <div className="pt-2 border-t border-gray-100">
+                  {isSeeker && !isOwner && (
+                    <Button className="w-full bg-blue-600 hover:bg-blue-700">
+                      Apply Now
+                    </Button>
+                  )}
+                  {isOwner && (
+                    <Button variant="outline" className="w-full" disabled>
+                      Your Job Post
+                    </Button>
+                  )}
+                  {!isAuthenticated && (
+                    <div className="text-center">
+                      <p className="text-xs text-gray-400 mb-3">
+                        Login to apply for this job
+                      </p>
+                      <Button
+                        variant="outline"
+                        className="w-full"
+                        onClick={() => router.push("/auth")}
+                      >
+                        Login / Register
+                      </Button>
+                    </div>
+                  )}
+                  {isAuthenticated && !isSeeker && !isOwner && (
+                    <Button variant="outline" className="w-full" disabled>
+                      Employers cannot apply
+                    </Button>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Company card */}
+            {job?.employer && (
+              <Card className="border border-gray-100 rounded-2xl">
+                <CardContent className="p-6">
+                  <h3 className="text-sm font-semibold text-gray-900 mb-3">
+                    About the Employer
+                  </h3>
+                  <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-full bg-blue-50 flex items-center justify-center">
+                      <Building2 size={14} className="text-blue-600" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-gray-800">
+                        {job.employer.username}
+                      </p>
+                      <p className="text-xs text-gray-400">
+                        {job.employer.email}
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }
 
