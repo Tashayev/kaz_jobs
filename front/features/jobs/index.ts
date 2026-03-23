@@ -6,6 +6,7 @@ import { useCallback, useEffect } from "react"
 import { RootState } from "@/store"
 import { fetchJobs } from "./thunk/fetchJobs"
 import { fetchJobById } from "./thunk/fetchJobById"
+import { jobsActions } from "./slice"
 
 export const useJobs = () => {
   const dispatch = useAppDispatch()
@@ -26,11 +27,13 @@ export const useJobs = () => {
 
   const handleFetchJobById = useCallback(
     async (id: string) => {
-      await dispatch(fetchJobById(id)).unwrap()
+      await dispatch(fetchJobById(id))
     },
     [dispatch],
   )
-
+const clearSelectedJob = useCallback(() => {
+  dispatch(jobsActions.clearSelectedJob())
+}, [dispatch])
   return {
     homeStage,
     isLoading,
@@ -39,5 +42,6 @@ export const useJobs = () => {
     handleFetchJobById,
     selectedJob,
     selectedJobLoading,
+    clearSelectedJob,
   }
 }

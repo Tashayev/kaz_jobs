@@ -1,4 +1,5 @@
 import { createNewJob, deleteJobById, getAllJobs, getJobById, updateJobById } from "../services/job.service.js"
+import mongoose from "mongoose"
 
 const createJob = async (req, res) => {
   try {

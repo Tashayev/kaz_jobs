@@ -3,7 +3,7 @@
 import { useJobs } from "@/features/jobs"
 import useUser from "@/features/users"
 import { notFound, useParams, useRouter } from "next/navigation"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -22,25 +22,32 @@ import Loading from "./loading"
 const JobDetailPage = () => {
   const { id } = useParams()
   const router = useRouter()
-  const { selectedJob: job, selectedJobLoading, handleFetchJobById } = useJobs()
+  const {
+    selectedJob: job,
+    selectedJobLoading,
+    handleFetchJobById,
+    clearSelectedJob,
+  } = useJobs()
   const { isAuthenticated, user } = useUser()
 
-  useEffect(() => {
-    if (id) handleFetchJobById(id as string)
-  }, [id, handleFetchJobById])
+  const [hasFetched, setHasFetched] = useState(false)
 
   useEffect(() => {
-    if (!selectedJobLoading && !job && id) notFound()
-  }, [selectedJobLoading, job, id])
+    clearSelectedJob()
+    if (id) {
+      handleFetchJobById(id as string).finally(() => setHasFetched(true))
+    }
+  }, [id, clearSelectedJob, handleFetchJobById])
+
+  useEffect(() => {
+    if (hasFetched && !selectedJobLoading && !job) notFound()
+  }, [hasFetched, selectedJobLoading, job])
 
   const isSeeker = isAuthenticated && user?.role === "seeker"
   const isOwner = user?.email === job?.employer?.email
-  
 
   if (selectedJobLoading) {
-    return (
-      <Loading />
-    )
+    return <Loading />
   }
 
   return (
