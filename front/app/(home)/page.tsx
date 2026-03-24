@@ -8,9 +8,10 @@ import HowItWorks from "./_components/HowItWorks"
 import Banner from "./_components/Banner"
 import { useJobs } from "@/features/jobs"
 
+
 const Home = () => {
    const { isLoading, homeStage } = useJobs()
- 
+  
   return (
     <div className="min-h-screen bg-white">
       <Hero />

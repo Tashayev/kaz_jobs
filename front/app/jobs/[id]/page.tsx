@@ -34,19 +34,20 @@ const JobDetail = () => {
 
   const isSeeker = isAuthenticated && user?.role === "seeker"
   const isOwner = user?.email === job?.employer?.email
-if (selectedJobLoading) {
+  if (selectedJobLoading) {
     return <Loading />
   }
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-5xl mx-auto px-6 py-10">
         <BackBtn />
-
-        {/* Header */}
         <Header job={job} />
-
-        {/* Body */}
-        <Body job={job} isSeeker={isSeeker} isOwner={isOwner} isAuthenticated={isAuthenticated} />
+        <Body
+          job={job}
+          isSeeker={isSeeker}
+          isOwner={isOwner}
+          isAuthenticated={isAuthenticated}
+        />
       </div>
     </div>
   )

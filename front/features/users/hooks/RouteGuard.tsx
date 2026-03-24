@@ -12,20 +12,20 @@ const authRoutes = [
   "/auth",
 ]
 const RouteGuard = ({ children }: { children: React.ReactNode }) => {
-
+  
     const { isLoading, isAuthenticated } = useUser();
     const route = useRouter();
     const pathname = usePathname();
 
     useEffect(() => {
         if (isLoading) return;
-        const isProtected = protectedRoutes.some((route) => pathname.startsWith(route));
-        const isAuth = authRoutes.some((route) => pathname.startsWith(route));
+        const isProtected = protectedRoutes.some((r) => r === pathname)
+        const isAuth = authRoutes.some((r) => pathname.startsWith(r))
         if (isProtected && !isAuthenticated) route.replace("/auth");
-        if ( isAuth && isAuthenticated) route.replace("/dashboard");
+        if ( isAuth && isAuthenticated) route.replace("/");
     }, [isAuthenticated, isLoading, pathname, route]);
 
-    if (isLoading) return null;
+    if (isLoading) return null
     
   return <>{children}</>;
 }
