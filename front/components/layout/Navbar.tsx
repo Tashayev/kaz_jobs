@@ -9,6 +9,7 @@ import useUser from "@/features/users"
 const navigations = [
   { label: "Find Job", path: "/jobs" },
   { label: "Categories", path: "/categories" },
+  { label: "Profile", path: "/profile" },
 ]
 
 const Navbar = () => {

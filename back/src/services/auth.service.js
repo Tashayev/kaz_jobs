@@ -51,3 +51,9 @@ export const getUsersService = async (role) => {
   const filter = role ? { role } : {}
   return await User.find(filter).select("-password -refreshToken -__v")
 }
+
+// export const deleteUserService = async (id) => {
+//   const user = await User.findById(id)
+//   if (!user) throw new Error("User not found.")
+//   await User.findByIdAndDelete(id)
+// }

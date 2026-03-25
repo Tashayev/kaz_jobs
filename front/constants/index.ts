@@ -9,6 +9,15 @@ import {
   Wrench,
   GraduationCap,
   ShoppingBag,
+  Megaphone,
+  Calculator,
+  Gavel,
+  Truck,
+  Building,
+  FileText,
+  Hotel,
+  Palette,
+  Shield,
 } from "lucide-react"
 
 export const STATS = [
@@ -19,12 +28,21 @@ export const STATS = [
 ]
 
 export const CATEGORIES = [
-  { label: "Technology", icon: Laptop, count: 234 },
-  { label: "Finance", icon: BarChart3, count: 118 },
-  { label: "Healthcare", icon: HeartHandshake, count: 95 },
-  { label: "Engineering", icon: Wrench, count: 142 },
-  { label: "Education", icon: GraduationCap, count: 87 },
-  { label: "Retail", icon: ShoppingBag, count: 63 },
+  { label: "IT & Technology", icon: Laptop, count: 234 },
+  { label: "Sales & Business Development", icon: BarChart3, count: 118 },
+  { label: "Marketing & PR", icon: Megaphone, count: 95 },
+  { label: "Healthcare & Pharma", icon: HeartHandshake, count: 95 },
+  { label: "Engineering & Manufacturing", icon: Wrench, count: 142 },
+  { label: "Education & Science", icon: GraduationCap, count: 87 },
+  { label: "Retail & E-commerce", icon: ShoppingBag, count: 63 },
+  { label: "Accounting & Finance", icon: Calculator, count: 0 },
+  { label: "Legal", icon: Gavel, count: 0 },
+  { label: "Logistics & Transportation", icon: Truck, count: 0 },
+  { label: "Construction & Real Estate", icon: Building, count: 0 },
+  { label: "Administrative Staff", icon: FileText, count: 0 },
+  { label: "Hospitality & Tourism", icon: Hotel, count: 0 },
+  { label: "Design & Creative", icon: Palette, count: 0 },
+  { label: "Security", icon: Shield, count: 0 }
 ]
 
 export const HOW_IT_WORKS = [

@@ -11,11 +11,23 @@ const registerUser = async (req, res) => {
   try {
     const { username, email, password, role } = req.body
     if (!username || !email || !password || !role) {
-      return res.status(400).json({ message: "Please provide all the required fields." })
+      return res
+        .status(400)
+        .json({ message: "Please provide all the required fields." })
     }
-    const { user, accessToken, refreshToken } = await registerService({ username, email, password, role })
+    const { user, accessToken, refreshToken } = await registerService({
+      username,
+      email,
+      password,
+      role,
+    })
     res.status(201).json({
-      user: { id: user._id, username: user.username, email: user.email, role: user.role },
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+        role: user.role,
+      },
       accessToken,
       refreshToken,
     })
@@ -28,11 +40,21 @@ const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body
     if (!email || !password) {
-      return res.status(400).json({ message: "Please provide all the required fields." })
+      return res
+        .status(400)
+        .json({ message: "Please provide all the required fields." })
     }
-    const { user, accessToken, refreshToken } = await loginService({ email, password })
+    const { user, accessToken, refreshToken } = await loginService({
+      email,
+      password,
+    })
     res.status(200).json({
-      user: { id: user._id, username: user.username, email: user.email, role: user.role },
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+        role: user.role,
+      },
       accessToken,
       refreshToken,
     })
@@ -54,8 +76,10 @@ const logoutUser = async (req, res) => {
 const getRefreshToken = async (req, res) => {
   try {
     const { refreshToken } = req.body
-    if (!refreshToken) return res.status(400).json({ message: "refreshToken is required." })
-    const { accessToken, refreshToken: newRefreshToken } = await refreshTokenService(refreshToken)
+    if (!refreshToken)
+      return res.status(400).json({ message: "refreshToken is required." })
+    const { accessToken, refreshToken: newRefreshToken } =
+      await refreshTokenService(refreshToken)
     res.status(200).json({ accessToken, refreshToken: newRefreshToken })
   } catch (err) {
     return res.status(401).json({ message: "Invalid or expired refreshToken." })
@@ -81,4 +105,22 @@ const getUsers = async (req, res) => {
   }
 }
 
-export { registerUser, loginUser, logoutUser, getRefreshToken, getProfile, getUsers }
+// const deleteUser = async (req, res) => {
+//   try {
+//     const user = await deleteUserService(req.user._id)
+//     if (!user) return res.status(404).json({ message: "User not found." })
+//     res.status(200).json({ message: "User deleted successfully." })
+//   } catch (err) {
+//     return res.status(500).json({ message: err.message })
+//   }
+// }
+
+export {
+  registerUser,
+  loginUser,
+  logoutUser,
+  getRefreshToken,
+  getProfile,
+  getUsers,
+  //deleteUser,
+}

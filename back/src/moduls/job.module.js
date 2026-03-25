@@ -1,4 +1,4 @@
-import mongoose, { Schema } from "mongoose"
+import mongoose, { Schema } from "mongoose";
 
 const jobSchema = new Schema(
   {
@@ -42,11 +42,28 @@ const jobSchema = new Schema(
     },
     category: {
       type: String,
-      enum: ["technology", "finance", "healthcare", "engineering", "education", "retail"],
-      default: "technology",
+      enum: [
+        "it-technology",
+        "sales-business-development",
+        "marketing-pr",
+        "healthcare-pharma",
+        "engineering-manufacturing",
+        "education-science",
+        "retail-ecommerce",
+        "accounting-finance",
+        "legal",
+        "logistics-transportation",
+        "construction-real-estate",
+        "administrative-staff",
+        "hospitality-tourism",
+        "design-creative",
+        "security",
+        "skilled-labor",
+      ],
+      default: "it-technology",
     },
   },
-  { timestamps: true },
-)
+  { timestamps: true }
+);
 
-export const Job = mongoose.model("Job", jobSchema)
+export const Job = mongoose.model("Job", jobSchema);
