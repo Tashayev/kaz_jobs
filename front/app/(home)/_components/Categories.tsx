@@ -38,7 +38,7 @@ const Categories = () => {
                 />
               </div>
             </Link>
-          ))}
+          )).filter((_, index) => index < 6)}
         </div>
       </section>
   )

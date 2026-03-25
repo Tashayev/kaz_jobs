@@ -6,7 +6,6 @@ import { FileText, UserCircle, Settings, Briefcase } from "lucide-react"
 import PersonalDetails from "../_sections/PersonalDetails"
 import CreateJobs from "../_sections/CreateJobs"
 
-// ─── Sections config ──────────────────────────────────────────────────────────
 const SECTIONS = [
   {
     title: "Personal Information",
@@ -24,13 +23,13 @@ const SECTIONS = [
     title: "My Jobs",
     icon: Briefcase,
     path: "my-jobs",
-    component: <div>My Jobs</div>, // placeholder
+    component: <div>My Jobs</div>
   },
   {
     title: "Settings",
     icon: Settings,
     path: "settings",
-    component: <div>Settings</div>, // placeholder
+    component: <div>Settings</div>
   },
 ]
 
