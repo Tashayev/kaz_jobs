@@ -38,3 +38,16 @@ export const updateJobById = async (id, employerId, data) => {
   if (!job) return null
   return await Job.findByIdAndUpdate(id, data, { new: true })
 }
+
+export const getJobsByEmployerService = async (employerId) => {
+  return await Job.find({ employer: employerId })
+}
+
+export const getJobsByCategory = async (query) => {
+  const { employerId } = query
+  return await getJobsByEmployerService(employerId)
+}
+
+export const getJobsByCategoryService = async (category) => {
+  return await Job.find({ category }).populate("employer", "username email")
+}

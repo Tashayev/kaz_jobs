@@ -18,3 +18,9 @@ export type JobState = {
   isLoading: boolean
   selectedJobLoading?: boolean
 }
+
+export type JobFilters = {
+  category?: string
+  type?: string
+  location?: string
+}

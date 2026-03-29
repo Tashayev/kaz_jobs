@@ -7,6 +7,11 @@ import { RootState } from "@/store"
 import { fetchJobs } from "./thunk/fetchJobs"
 import { fetchJobById } from "./thunk/fetchJobById"
 import { jobsActions } from "./slice"
+import { getJobsByCategory } from "./thunk/getJobsByCategory"
+import { getJobsByEmployer } from "./thunk/getJobsByEmployer"
+import { deleteJob } from "./thunk/deleteJob"
+import { updateJob } from "./thunk/updateJob"
+import { Job, JobFilters } from "./types"
 
 export const useJobs = () => {
   const dispatch = useAppDispatch()
@@ -17,9 +22,12 @@ export const useJobs = () => {
 
   const homeStage = jobs.slice(0, 6)
 
-  const handleFetchJobs = useCallback(async () => {
-    await dispatch(fetchJobs()).unwrap()
-  }, [dispatch])
+  const handleFetchJobs = useCallback(
+    async (filters: JobFilters = {}) => {
+      await dispatch(fetchJobs(filters)).unwrap()
+    },
+    [dispatch],
+  )
 
   useEffect(() => {
     if (jobs.length === 0) handleFetchJobs()
@@ -31,9 +39,34 @@ export const useJobs = () => {
     },
     [dispatch],
   )
-const clearSelectedJob = useCallback(() => {
-  dispatch(jobsActions.clearSelectedJob())
-}, [dispatch])
+  const clearSelectedJob = useCallback(() => {
+    dispatch(jobsActions.clearSelectedJob())
+  }, [dispatch])
+
+  const handleGetJobsByCategory = useCallback(
+    async (category: string) => {
+      await dispatch(getJobsByCategory(category))
+    },
+    [dispatch],
+  )
+
+  const handleGetJobsByEmployer = useCallback(async () => {
+    await dispatch(getJobsByEmployer())
+  }, [dispatch])
+  const handleDeleteJob = useCallback(
+    async (id: string) => {
+      await dispatch(deleteJob(id))
+    },
+    [dispatch],
+  )
+
+  const handleUpdateJob = useCallback(
+    async (job: Job) => {
+      await dispatch(updateJob(job))
+    },
+    [dispatch],
+  )
+
   return {
     homeStage,
     isLoading,
@@ -43,5 +76,14 @@ const clearSelectedJob = useCallback(() => {
     selectedJob,
     selectedJobLoading,
     clearSelectedJob,
+    handleGetJobsByCategory,
+    handleGetJobsByEmployer,
+    handleDeleteJob,
+    handleUpdateJob,
   }
 }
+// in jobs page
+// handleFetchJobs({ category: "it-technology" })
+// handleFetchJobs({ type: "remote" })
+// handleFetchJobs({ category: "it-technology", type: "remote" })
+// handleFetchJobs() // reset — all jobs

@@ -52,6 +52,22 @@ export const getUsersService = async (role) => {
   return await User.find(filter).select("-password -refreshToken -__v")
 }
 
+export const updateUserService = async (id, data) => {
+  const user = await User.findById(id)
+  if (!user) throw new Error("User not found.")
+  await User.findByIdAndUpdate(id, data)  
+  return await User.findById(id).select("-password -refreshToken")
+}
+
+export const changePasswordService = async (id, oldPassword, newPassword) => {
+  const user = await User.findById(id)
+  if (!user) throw new Error("User not found.")
+  if (!(await user.comparePassword(oldPassword))) throw new Error("Incorrect password.")
+  user.password = newPassword  // pre-save hook will hash it
+  await user.save()            // triggers bcrypt hash
+  const { accessToken, refreshToken } = await generateToken(user)
+  return { user, accessToken, refreshToken }
+}
 // export const deleteUserService = async (id) => {
 //   const user = await User.findById(id)
 //   if (!user) throw new Error("User not found.")

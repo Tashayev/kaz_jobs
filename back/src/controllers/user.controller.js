@@ -5,6 +5,7 @@ import {
   refreshTokenService,
   getProfileService,
   getUsersService,
+  changePasswordService,
 } from "../services/auth.service.js"
 
 const registerUser = async (req, res) => {
@@ -105,6 +106,28 @@ const getUsers = async (req, res) => {
   }
 }
 
+const updateUser = async (req, res) => {
+  try {
+    const user = await updateUserService(req.user._id, req.body)
+    if (!user) return res.status(404).json({ message: "User not found." })
+    
+    res.status(200).json({ user })
+  } catch (err) {
+    return res.status(500).json({ message: err.message })
+  }
+}
+
+const changePassword = async (req, res) => {
+  try {
+    const { oldPassword, newPassword } = req.body
+    if (!oldPassword || !newPassword) return res.status(400).json({ message: "Please provide all the required fields." })
+    const { user, accessToken, refreshToken } = await changePasswordService(req.user._id, oldPassword, newPassword)
+    res.status(200).json({ user, accessToken, refreshToken })
+  } catch (err) {
+    return res.status(500).json({ message: err.message })
+  }
+}
+
 // const deleteUser = async (req, res) => {
 //   try {
 //     const user = await deleteUserService(req.user._id)
@@ -122,5 +145,7 @@ export {
   getRefreshToken,
   getProfile,
   getUsers,
+  updateUser,
+  changePassword
   //deleteUser,
 }
