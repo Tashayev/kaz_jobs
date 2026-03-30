@@ -1,6 +1,6 @@
 "use client"
 
-import AuthTabs from "@/features/users/components/AuthTabs"
+import AuthTabs from "@/app/auth/_components/AuthTabs"
 
 const AuthPage = () => {
   return (

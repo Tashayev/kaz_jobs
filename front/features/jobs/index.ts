@@ -11,7 +11,8 @@ import { getJobsByCategory } from "./thunk/getJobsByCategory"
 import { getJobsByEmployer } from "./thunk/getJobsByEmployer"
 import { deleteJob } from "./thunk/deleteJob"
 import { updateJob } from "./thunk/updateJob"
-import { Job, JobFilters } from "./types"
+import { CreateJobPayload, Job, JobFilters } from "./types"
+import { createJob } from "./thunk/createJob"
 
 export const useJobs = () => {
   const dispatch = useAppDispatch()
@@ -66,6 +67,12 @@ export const useJobs = () => {
     },
     [dispatch],
   )
+  const handleCreateJob = useCallback(
+    async (job: CreateJobPayload) => {
+      await dispatch(createJob(job))
+    },
+    [dispatch],
+  )
 
   return {
     homeStage,
@@ -80,6 +87,7 @@ export const useJobs = () => {
     handleGetJobsByEmployer,
     handleDeleteJob,
     handleUpdateJob,
+    handleCreateJob
   }
 }
 // in jobs page

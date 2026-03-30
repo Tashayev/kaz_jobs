@@ -28,6 +28,5 @@ export type UserLoginTypes = {
 
 export type UserUpdateTypes = {
   username: string
-  email: string
   role: "seeker" | "employer"
 }

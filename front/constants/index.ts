@@ -68,3 +68,32 @@ export const TYPE_COLORS: Record<string, string> = {
   "part-time": "bg-amber-50 text-amber-700",
   remote: "bg-emerald-50 text-emerald-700",
 }
+export const JOB_TYPES = [
+  { label: "Full Time", value: "full-time" },
+  { label: "Part Time", value: "part-time" },
+  { label: "Remote", value: "remote" },
+]
+
+export const KZ_CITIES = [
+  "Almaty", "Astana", "Shymkent", "Karaganda", 
+  "Aktobe", "Taraz", "Oral", "Pavlodar"
+]
+
+export const JOB_CATEGORIES = [
+  { label: "IT & Technology", value: "it-technology" },
+  { label: "Sales & Business", value: "sales-business-development" },
+  { label: "Marketing & PR", value: "marketing-pr" },
+  { label: "Healthcare", value: "healthcare-pharma" },
+  { label: "Engineering", value: "engineering-manufacturing" },
+  { label: "Education", value: "education-science" },
+  { label: "Retail", value: "retail-ecommerce" },
+  { label: "Finance", value: "accounting-finance" },
+  { label: "Legal", value: "legal" },
+  { label: "Logistics", value: "logistics-transportation" },
+  { label: "Construction", value: "construction-real-estate" },
+  { label: "Admin", value: "administrative-staff" },
+  { label: "Hospitality", value: "hospitality-tourism" },
+  { label: "Design", value: "design-creative" },
+  { label: "Security", value: "security" },
+  { label: "Skilled Labor", value: "skilled-labor" },
+]

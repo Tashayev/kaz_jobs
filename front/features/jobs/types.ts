@@ -1,3 +1,5 @@
+import { title } from "process"
+
 export type Job = {
   _id: string
   title: string
@@ -24,3 +26,14 @@ export type JobFilters = {
   type?: string
   location?: string
 }
+export type CreateJobPayload = {
+  title: string
+  description: string
+  salary?: number
+  location?: string
+  skills?: string[]
+  type?: string
+  deadline?: string
+  category?: string
+}
+        

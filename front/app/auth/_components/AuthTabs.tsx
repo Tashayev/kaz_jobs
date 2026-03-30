@@ -1,7 +1,7 @@
 "use client"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import RegisterForm from "./RegisterForm"
-import LoginForm from "./LoginForm"
+import RegisterForm from "../../../features/users/components/RegisterForm"
+import LoginForm from "../../../features/users/components/LoginForm"
 
 const AuthTabs = () => {
   return (
