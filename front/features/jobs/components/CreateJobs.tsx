@@ -15,7 +15,7 @@ const formSchema = z.object({
   title: z.string().min(3).max(30),
   description: z.string().min(5).max(1000),
   location: z.string().optional(),
-  salary: z.coerce.number().min(0).optional(),
+  salary: z.number().min(0).optional(),
   type: z.enum(["full-time", "part-time", "remote"]).optional(),
   category: z.string().optional(),
   skills: z.string().optional(), 
@@ -89,8 +89,6 @@ const CreateJobs = () => {
             placeholder="e.g. 500000"
             type="number"
           />
-
-          {/* Job Type */}
           <Field>
             <FieldLabel>Job Type</FieldLabel>
             <div className="flex gap-2 mt-1">

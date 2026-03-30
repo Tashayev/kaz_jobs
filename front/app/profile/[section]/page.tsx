@@ -3,8 +3,8 @@
 import { use } from "react"
 import { notFound } from "next/navigation"
 import { FileText, UserCircle, Settings, Briefcase } from "lucide-react"
-import PersonalDetails from "../_sections/PersonalDetails"
-import CreateJobs from "../_sections/CreateJobs"
+import PersonalDetails from "../../../features/jobs/components/PersonalDetails"
+import CreateJobs from "../../../features/jobs/components/CreateJobs"
 
 const SECTIONS = [
   {
