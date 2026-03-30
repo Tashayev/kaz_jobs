@@ -17,7 +17,7 @@ const jobSchema = new Schema(
       maxlength: 1000,
     },
     salary: {
-      type: Number,
+      type: String,
       max: 1000000000000,
       min: 0,
     },

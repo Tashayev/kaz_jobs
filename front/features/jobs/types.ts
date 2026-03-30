@@ -5,7 +5,8 @@ export type Job = {
   title: string
   description: string
   location?: string
-  salary?: number
+  salary?: string
+  category?: string
   type?: string
   skills?: string[]
   deadline?: string
@@ -29,7 +30,7 @@ export type JobFilters = {
 export type CreateJobPayload = {
   title: string
   description: string
-  salary?: number
+  salary?: string
   location?: string
   skills?: string[]
   type?: string

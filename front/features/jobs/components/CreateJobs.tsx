@@ -15,7 +15,7 @@ const formSchema = z.object({
   title: z.string().min(3).max(30),
   description: z.string().min(5).max(1000),
   location: z.string().optional(),
-  salary: z.number().min(0).optional(),
+  salary: z.string().optional(),
   type: z.enum(["full-time", "part-time", "remote"]).optional(),
   category: z.string().optional(),
   skills: z.string().optional(), 
@@ -31,7 +31,7 @@ const CreateJobs = () => {
       title: "",
       description: "",
       location: "",
-      salary: undefined,
+      salary: "",
       type: "full-time",
       category: "it-technology",
       skills: "",
@@ -105,8 +105,6 @@ const CreateJobs = () => {
               ))}
             </div>
           </Field>
-
-          {/* Category */}
           <Field>
             <FieldLabel>Category</FieldLabel>
             <div className="flex flex-wrap gap-2 mt-1">
