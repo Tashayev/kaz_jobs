@@ -1,0 +1,22 @@
+# dependencies
+node_modules/
+*/node_modules/
+
+# env files
+.env
+.env.local
+.env.production
+*/.env
+*/.env.local
+
+# Next.js
+front/.next/
+front/out/
+
+# build
+back/dist/
+front/.next/
+
+# logs
+*.log
+npm-debug.log*
