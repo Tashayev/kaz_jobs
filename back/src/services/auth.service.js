@@ -56,7 +56,7 @@ export const updateUserService = async (id, data) => {
   const user = await User.findById(id)
   if (!user) throw new Error("User not found.")
   await User.findByIdAndUpdate(id, data)  
-  return await User.findById(id).select("-password -refreshToken -email -__v")
+  return await User.findById(id).select("-password -refreshToken -__v")
 }
 
 export const changePasswordService = async (id, oldPassword, newPassword) => {

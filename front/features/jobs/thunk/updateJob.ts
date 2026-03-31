@@ -8,7 +8,10 @@ export const updateJob = createAsyncThunk(
   "job/updateJob",
   async (job: Job, { rejectWithValue }) => {
     try {
-      const response = await baseApi.patch(Endpoints.JOB, job)
+      const response = await baseApi.patch(
+        Endpoints.JOB.replace(":id", job._id),
+        job,
+      )
       return response.data
     } catch (err) {
       if (err instanceof AxiosError) {
