@@ -11,7 +11,7 @@ import {
 import PersonalDetails from "../../../features/jobs/components/PersonalDetails"
 import CreateJobs from "../../../features/jobs/components/CreateJobs"
 import MyJobs from "@/features/users/components/MyJobs"
-import Settings from "./Section"
+import Settings from "../_components/Settings"
 
 const SECTIONS = [
   {
